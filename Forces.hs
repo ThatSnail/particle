@@ -33,10 +33,10 @@ enactForceType EMForce dt ps = map applyAllForces ps
 
 -- Apply a force onto one particle
 applyForceSingle :: Force -> TimeStep -> Particle -> Particle
-applyForceSingle (Force _ mag dir) dt p@(Particle pType pos vel) = Particle pType pos nvel
+applyForceSingle (Force _ mag dir) dt p@(Particle {pType = pt, vel = v}) = p { vel = nvel }
     where
-        nvel = vel + (Vector3D da da da)
+        nvel = v + (Vector3D da da da)
             where
-                m = mass pType
+                m = mass pt
                 a = mag / m
                 da = a * dt
