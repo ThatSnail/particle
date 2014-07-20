@@ -1,6 +1,9 @@
 module Simulation (
-      runSimulation
+      Simulation ( Simulation, simScale )
+    , runSimulation
     , testSimHydrogen
+    , testSimElectron
+    , testSimTwoElectrons
     ) where
 
 import Particle
