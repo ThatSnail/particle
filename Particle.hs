@@ -2,8 +2,9 @@ module Particle (
       Particle ( Particle, pType, pos, vel )
     , ParticleType ( Proton, Neutron, Electron )
     , mass
-    , charge )
-    where
+    , charge
+    , radius
+    ) where
 
 import Math
 import Physics
@@ -27,3 +28,10 @@ charge :: (Floating a) => ParticleType -> a
 charge Proton = 1.6 * 10 ** (-19)
 charge Neutron = 0
 charge Electron = (-1.6) * 10 ** (-19)
+
+-- All radii in meters
+-- NOTE: ALL OF THESE ARE VERY, VERY WRONG!
+radius :: (Floating a) => ParticleType -> a
+radius Proton = 5.29 * 10 ** (-11)
+radius Neutron = 5.29 * 10 ** (-11)
+radius Electron = 5.29 * 10 ** (-11)
