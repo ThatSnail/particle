@@ -34,10 +34,10 @@ updateParticles dt ps = map updateParticle $ enactAllForces dt ps
 
 -- Test simulations
 testSimElectron :: Simulation
-testSimElectron = Simulation "Single Electron" [Particle Electron (Vector3D 0 0 0) (Vector3D 0 0 0)] 0.1 10 (bohrsRadius * 100)
+testSimElectron = Simulation "Single Electron" [Particle Electron (Vector3D 0 0 0) (Vector3D 0 0 0)] 0.001 10 10
 
 testSimTwoElectrons :: Simulation
 testSimTwoElectrons = Simulation "Two Electrons" [Particle Electron (Vector3D (-0.5) 0 0) (Vector3D 0 0 0), Particle Electron (Vector3D 0.5 0 0) (Vector3D 0 0 0)] 0.001 10 10
 
 testSimHydrogen :: Simulation
-testSimHydrogen = Simulation "Single Hydrogen Atom" (spawnAtom Hydrogen (Vector3D 0 0 0) (Vector3D 0 0 0) []) 0.1 10 (bohrsRadius * 100)
+testSimHydrogen = Simulation "Single Hydrogen Atom" (spawnAtom Hydrogen (Vector3D 0 0 0) (Vector3D 0 0 0) []) 0.001 10 10
