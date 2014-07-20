@@ -10,37 +10,39 @@ import Physics
 screenSize :: Int
 screenSize = 500
 
-realSize :: Double
-realSize = bohrsRadius * 100
+particleSizeFactor :: Double
+particleSizeFactor = 0.4
 
-particleSizeFactor :: (Num a) => a
-particleSizeFactor = 1
+-- Set how much time passes in one second during the animation
+timeScale :: Float
+timeScale = 0.1
 
-buildAnimation :: [(Double, [Particle])] -> Float -> Picture
-buildAnimation frames t = getPicture maybeInd
+buildAnimation :: Simulation -> Float -> Picture
+buildAnimation sim@(Simulation {simScale = ss}) t = getPicture maybeInd
     where
+        frames = runSimulation sim
         ts = map fst frames
         ps = map snd frames
-        maybeInd = binarySearchLower (float2Double t) ts
-        getPicture (Just i) = drawParticles (ps !! i)
+        maybeInd = binarySearchLower (float2Double (t * timeScale)) ts
+        getPicture (Just i) = drawParticles ss (ps !! i)
         getPicture Nothing = blank
 
-drawParticles :: [Particle] -> Picture
-drawParticles ps = pictures $ map drawParticle ps
+drawParticles :: Double -> [Particle] -> Picture
+drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
 
-drawParticle :: Particle -> Picture
-drawParticle p@(Particle pType (Vector3D x y z) _) = translate (double2Float nx) (double2Float ny) $ color col $ circleSolid nr
+drawParticle :: Double -> Particle -> Picture
+drawParticle simScale p@(Particle pType (Vector3D x y z) _) = translate (double2Float nx) (double2Float ny) $ color col $ circleSolid $ max 1 nr
     where
-        nx = x * (fromIntegral (screenSize `div` 2)) / realSize
-        ny = y * (fromIntegral (screenSize `div` 2)) / realSize
-        nr = double2Float $ fromIntegral screenSize * particleSizeFactor * (radius pType) / realSize
+        nx = x * (fromIntegral (screenSize `div` 2)) / simScale
+        ny = y * (fromIntegral (screenSize `div` 2)) / simScale
+        nr = double2Float $ fromIntegral screenSize * particleSizeFactor * (radius pType) / simScale
         col
             | pType == Proton = red
             | pType == Neutron = greyN 0.5
             | pType == Electron = yellow
 
-drawSimulation :: [(Double, [Particle])] -> IO ()
+drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black $ buildAnimation simOut
 
 main :: IO ()
-main = drawSimulation $ runSimulation $ testSimHydrogen
+main = drawSimulation $ testSimTwoElectrons
