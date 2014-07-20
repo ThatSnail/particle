@@ -6,6 +6,7 @@ module Particle (
     where
 
 import Math
+import Physics
 
 data ParticleType = Proton | Neutron | Electron deriving (Eq, Show)
 
@@ -13,7 +14,7 @@ data Particle = Particle {
       pType :: ParticleType
     , pos :: Vector3D Double
     , vel :: Vector3D Double
-    } deriving Eq
+    } deriving (Eq, Show)
 
 -- All masses in kilograms
 mass :: (Floating a) => ParticleType -> a
