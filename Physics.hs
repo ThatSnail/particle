@@ -13,4 +13,4 @@ coulombsConst = 8.9875517873681764 * 10 ^ 9
 
 -- Bohr's radius in meters
 bohrsRadius :: Double
-bohrsRadius = 5.29 / (10 ^ 11)
+bohrsRadius = 5.29 * 10 ** (-11)
