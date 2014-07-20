@@ -1,6 +1,7 @@
 {-| Elementary forces |-}
 
 module Forces (
+      enactAllForces
     )
     where
 
@@ -9,7 +10,6 @@ import Math
 import Particle
 import Physics
 
-type TimeStep = Double
 data ForceType = EMForce
 
 data Force = Force {
@@ -17,6 +17,11 @@ data Force = Force {
     , mag :: Double
     , dir :: Vector3D Double
     }
+
+-- Simulate a new [Particle] with all forces applied throughout
+-- TODO : Update with other forces
+enactAllForces :: TimeStep -> [Particle] -> [Particle]
+enactAllForces dt ps = enactForceType EMForce dt ps
 
 -- Simulate a new [Particle] with force applied throughout
 -- Assume linear development throughout timestep (Euler's approximation, 1 step)
