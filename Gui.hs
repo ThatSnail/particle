@@ -40,9 +40,10 @@ drawParticle simScale p@(Particle pType (Vector3D x y z) _) = translate (double2
             | pType == Proton = red
             | pType == Neutron = greyN 0.5
             | pType == Electron = yellow
+            | pType == Positron = blue
 
 drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black $ buildAnimation simOut
 
 main :: IO ()
-main = drawSimulation $ testSimTwoElectrons
+main = drawSimulation $ testSimElectronPositron

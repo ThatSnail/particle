@@ -3,6 +3,7 @@ module Simulation (
     , runSimulation
     , testSimHydrogen
     , testSimElectron
+    , testSimElectronPositron
     , testSimTwoElectrons
     ) where
 
