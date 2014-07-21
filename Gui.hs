@@ -41,4 +41,4 @@ drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black $ buildAnimation simOut
 
 main :: IO ()
-main = drawSimulation $ testSimElectronPositron
+main = drawSimulation $ testSimElectron
