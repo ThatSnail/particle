@@ -4,7 +4,6 @@ import GHC.Float
 import Simulation
 import Particle
 import Math
-import Algorithm
 import Physics
 import NumberTypes
 
