@@ -12,16 +12,17 @@ import Physics
 import Forces
 import Math
 import Atom
+import NumberTypes
 
 data Simulation = Simulation {
       name :: String
     , initialSetup :: [Particle]
-    , timeStep :: Double
-    , duration :: Double
-    , simScale :: Double
+    , timeStep :: PreciseNum
+    , duration :: PreciseNum
+    , simScale :: PreciseNum
     }
 
-runSimulation :: Simulation -> [(Double, [Particle])]
+runSimulation :: Simulation -> [(PreciseNum, [Particle])]
 runSimulation (Simulation _ initialSetup timeStep duration _) = zip ([0, timeStep.. duration]) $ iterate (updateParticles timeStep) initialSetup
 
 updateParticles :: TimeStep -> [Particle] -> [Particle]

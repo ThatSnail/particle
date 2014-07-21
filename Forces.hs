@@ -9,13 +9,14 @@ import Data.List
 import Math
 import Particle
 import Physics
+import NumberTypes
 
 data ForceType = EMForce
 
 data Force = Force {
       fType :: ForceType
-    , mag :: Double
-    , dir :: Vector3D Double
+    , mag :: PreciseNum
+    , dir :: Vector3D PreciseNum
     }
 
 -- Simulate a new [Particle] with all forces applied throughout
