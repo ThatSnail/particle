@@ -19,14 +19,9 @@ timeScale :: Float
 timeScale = 0.1
 
 buildAnimation :: Simulation -> Float -> Picture
-buildAnimation sim@(Simulation {simScale = ss}) t = getPicture maybeInd
+buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
     where
         frames = runSimulation sim
-        ts = map fst frames
-        ps = map snd frames
-        maybeInd = binarySearchLower (t * timeScale) (map realToFrac ts)
-        getPicture (Just i) = drawParticles ss (ps !! i)
-        getPicture Nothing = blank
 
 drawParticles :: Double -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps

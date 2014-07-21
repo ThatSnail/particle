@@ -1,5 +1,5 @@
 module Simulation (
-      Simulation ( Simulation, simScale )
+      Simulation ( Simulation, timeStep, simScale )
     , runSimulation
     , testSimHydrogen
     , testSimElectron
@@ -17,13 +17,13 @@ import NumberTypes
 data Simulation = Simulation {
       name :: String
     , initialSetup :: [Particle]
-    , timeStep :: Double
-    , duration :: Double
+    , timeStep :: Float
+    , duration :: Float
     , simScale :: Double
     }
 
-runSimulation :: Simulation -> [(Double, [Particle])]
-runSimulation (Simulation _ initialSetup timeStep duration _) = zip ([0, timeStep.. duration]) $ iterate (updateParticles timeStep) initialSetup
+runSimulation :: Simulation -> [[Particle]]
+runSimulation (Simulation _ initialSetup timeStep duration _) = iterate (updateParticles timeStep) initialSetup
 
 updateParticles :: TimeStep -> [Particle] -> [Particle]
 updateParticles dt ps = map updateParticle $ enactAllForces dt ps
