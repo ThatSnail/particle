@@ -6,7 +6,7 @@ module Physics (
 
 import NumberTypes
 
-type TimeStep = PreciseNum
+type TimeStep = Double
 
 -- Coulomb's constant 1 / (4 * pi * e0)
 --  where e0 is the permittivity of free space

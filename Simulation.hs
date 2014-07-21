@@ -17,12 +17,12 @@ import NumberTypes
 data Simulation = Simulation {
       name :: String
     , initialSetup :: [Particle]
-    , timeStep :: PreciseNum
-    , duration :: PreciseNum
-    , simScale :: PreciseNum
+    , timeStep :: Double
+    , duration :: Double
+    , simScale :: Double
     }
 
-runSimulation :: Simulation -> [(PreciseNum, [Particle])]
+runSimulation :: Simulation -> [(Double, [Particle])]
 runSimulation (Simulation _ initialSetup timeStep duration _) = zip ([0, timeStep.. duration]) $ iterate (updateParticles timeStep) initialSetup
 
 updateParticles :: TimeStep -> [Particle] -> [Particle]
@@ -32,7 +32,7 @@ updateParticles dt ps = map updateParticle $ enactAllForces dt ps
             where
                 np = p + dv
                     where
-                        dv = v * Vector3D dt dt dt
+                        dv = v * Vector3D (realToFrac dt) (realToFrac dt) (realToFrac dt)
 
 -- Test simulations
 testSimElectron :: Simulation

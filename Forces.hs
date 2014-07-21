@@ -45,4 +45,4 @@ applyForceSingle (Force _ mag dir) dt p@(Particle {pType = pt, vel = v}) = p { v
             where
                 m = mass pt
                 a = mag / m
-                da = a * dt
+                da = a * (realToFrac dt)
