@@ -42,7 +42,7 @@ testSimTwoElectrons :: Simulation
 testSimTwoElectrons = Simulation "Two Electrons" [Particle Electron (Vector3D (-0.5) 0 0) (Vector3D 0 0 0), Particle Electron (Vector3D 0.5 0 0) (Vector3D 0 0 0)] 0.001 1 10
 
 testSimElectronPositron :: Simulation
-testSimElectronPositron = Simulation "Electron and Positron" [Particle Electron (Vector3D (-0.5) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.5 0 0) (Vector3D 0 0 0)] 0.001 1 10
+testSimElectronPositron = Simulation "Electron and Positron" [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)] 0.00001 1 10
 
 testSimHydrogen :: Simulation
 testSimHydrogen = Simulation "Single Hydrogen Atom" (spawnAtom Hydrogen (Vector3D 0 0 0) (Vector3D 0 0 0) []) 0.001 1 10
