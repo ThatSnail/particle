@@ -34,7 +34,7 @@ enactForceType EMForce dt ps = map applyAllForces ps
             where
                 force p1 p2 = Force EMForce (forceMag p1 p2) (forceDir p1 p2)
                     where
-                        forceMag p1 p2 = (-coulombsConst) * (charge $ pType p1) * (charge $ pType p2) / (dist (pos p1) (pos p2))
+                        forceMag p1 p2 = realToFrac ((-coulombsConst) * (charge $ pType p1) * (charge $ pType p2)) / (dist (pos p1) (pos p2))
                         forceDir p1 p2 = norm $ (pos p2) - (pos p1)
 
 -- Apply a force onto one particle
@@ -44,5 +44,5 @@ applyForceSingle (Force _ mag dir) dt p@(Particle {pType = pt, vel = v}) = p { v
         nvel = v + (Vector3D da da da) * dir
             where
                 m = mass pt
-                a = mag / m
+                a = mag / (realToFrac m)
                 da = a * (realToFrac dt)

@@ -4,4 +4,5 @@ module NumberTypes (
 
 import Data.Number.Fixed
 
-type PreciseNum = Fixed Prec50
+--type PreciseNum = Fixed Prec10
+type PreciseNum = Double

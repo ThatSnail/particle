@@ -21,7 +21,7 @@ instance (Floating a) => Fractional (Vector3D a) where
 
 -- Distance between two points in 3D space
 dist :: (Floating a) => Vector3D a -> Vector3D a -> a
-dist (Vector3D x1 y1 z1) (Vector3D x2 y2 z2) = sqrt ((x1 - x2) ** 2 + (y1 - y2) ** 2 + (z1 - z2) ** 2)
+dist (Vector3D x1 y1 z1) (Vector3D x2 y2 z2) = sqrt ((x1 - x2) ^ 2 + (y1 - y2) ^ 2 + (z1 - z2) ^ 2)
 
 -- Magnitude of vector
 mag :: (Floating a) => Vector3D a -> a
