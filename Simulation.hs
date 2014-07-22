@@ -1,12 +1,14 @@
 module Simulation (
       Simulation ( Simulation, initialSetup, timeStep, simScale )
-    , runSimulation
-    , saveSimResult
+    , getSimResult
     , testSimHydrogen
     , testSimElectron
     , testSimElectronPositron
     , testSimTwoElectrons
     ) where
+
+import System.Directory
+import System.IO.Unsafe
 
 import Particle
 import Physics
@@ -40,10 +42,23 @@ updateParticles dt ps = map updateParticle $ enactAllForces dt ps
 saveSimResult :: Simulation -> IO ()
 saveSimResult sim@(Simulation {name = n}) = writeFile path (show $ runSimulation sim)
     where
-        path = n ++ ".sim"
+        path = simulationPath sim
 
 loadSimResult :: Simulation -> IO [[Particle]]
 loadSimResult sim@(Simulation {name = n}) = readFile (n ++ ".sim") >>= \s -> return $ read s
+
+simulationPath :: Simulation -> String
+simulationPath Simulation { name = nameStr } = nameStr ++ ".sim"
+
+-- Get the simulation result, either by running or loading a saved simulation
+getSimResult :: Simulation -> [[Particle]]
+getSimResult sim
+    | unsafePerformIO (doesFileExist $ simulationPath sim) = unsafePerformIO $ loadSimResult sim
+    | otherwise = unsafePerformIO $ do
+        let r = runSimulation sim
+        saveSimResult sim
+        return r
+
 
 -- Test simulations
 testSimElectron :: Simulation

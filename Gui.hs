@@ -20,7 +20,7 @@ timeScale = 0.1
 buildAnimation :: Simulation -> Float -> Picture
 buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
     where
-        frames = runSimulation sim
+        frames = getSimResult sim
 
 drawParticles :: Double -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
