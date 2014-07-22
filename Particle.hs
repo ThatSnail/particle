@@ -10,13 +10,13 @@ import Math
 import Physics
 import NumberTypes
 
-data ParticleType = Proton | Neutron | Electron | Positron deriving (Eq, Show)
+data ParticleType = Proton | Neutron | Electron | Positron deriving (Eq, Show, Read)
 
 data Particle = Particle {
       pType :: ParticleType
     , pos :: Vector3D PreciseNum
     , vel :: Vector3D PreciseNum
-    } deriving (Eq, Show)
+    } deriving (Eq, Show, Read)
 
 -- All masses in kilograms
 mass :: ParticleType -> Double

@@ -22,7 +22,7 @@ data Simulation = Simulation {
     , timeStep :: Float
     , duration :: Float
     , simScale :: Double
-    }
+    } deriving Read
 
 runSimulation :: Simulation -> [[Particle]]
 runSimulation (Simulation _ _ initialSetup timeStep duration _) = take (floor (duration / timeStep)) $ iterate (updateParticles timeStep) initialSetup
@@ -41,6 +41,9 @@ saveSimResult :: Simulation -> IO ()
 saveSimResult sim@(Simulation {name = n}) = writeFile path (show $ runSimulation sim)
     where
         path = n ++ ".sim"
+
+loadSimResult :: Simulation -> IO [[Particle]]
+loadSimResult sim@(Simulation {name = n}) = readFile (n ++ ".sim") >>= \s -> return $ read s
 
 -- Test simulations
 testSimElectron :: Simulation

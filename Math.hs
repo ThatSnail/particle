@@ -5,7 +5,7 @@ module Math (
     , norm
     ) where
 
-data Vector3D a = Vector3D a a a deriving (Show, Eq)
+data Vector3D a = Vector3D a a a deriving (Show, Eq, Read)
 
 instance (Floating a) => Num (Vector3D a) where
     Vector3D x1 y1 z1 + Vector3D x2 y2 z2 = Vector3D (x1 + x2) (y1 + y2) (z1 + z2)
