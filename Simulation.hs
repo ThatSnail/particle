@@ -8,7 +8,6 @@ module Simulation (
     ) where
 
 import System.Directory
-import System.IO.Unsafe
 
 import Particle
 import Physics
@@ -45,20 +44,18 @@ saveSimResult sim@(Simulation {name = n}) = writeFile path (show $ runSimulation
         path = simulationPath sim
 
 loadSimResult :: Simulation -> IO [[Particle]]
-loadSimResult sim@(Simulation {name = n}) = readFile (n ++ ".sim") >>= \s -> return $ read s
+loadSimResult sim@(Simulation {name = n}) = readFile (n ++ ".sim") >>= return . read
 
 simulationPath :: Simulation -> String
 simulationPath Simulation { name = nameStr } = nameStr ++ ".sim"
 
 -- Get the simulation result, either by running or loading a saved simulation
-getSimResult :: Simulation -> [[Particle]]
-getSimResult sim
-    | unsafePerformIO (doesFileExist $ simulationPath sim) = unsafePerformIO $ loadSimResult sim
-    | otherwise = unsafePerformIO $ do
-        let r = runSimulation sim
-        saveSimResult sim
-        return r
-
+getSimResult :: Simulation -> IO [[Particle]]
+getSimResult sim = do
+    simAlreadyBuilt <- doesFileExist $ simulationPath sim
+    if simAlreadyBuilt
+        then loadSimResult sim
+        else saveSimResult sim >> return (runSimulation sim)
 
 -- Test simulations
 testSimElectron :: Simulation

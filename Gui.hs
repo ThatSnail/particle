@@ -17,10 +17,8 @@ particleSizeFactor = 0.4
 timeScale :: Float
 timeScale = 0.1
 
-buildAnimation :: Simulation -> Float -> Picture
-buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
-    where
-        frames = getSimResult sim
+buildAnimation :: Simulation -> [[Particle]] -> Float -> Picture
+buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) frames t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
 
 drawParticles :: Double -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
@@ -38,7 +36,7 @@ drawParticle simScale p@(Particle pType (Vector3D x y z) _) = translate (realToF
             | pType == Positron = blue
 
 drawSimulation :: Simulation -> IO ()
-drawSimulation simOut = animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black $ buildAnimation simOut
+drawSimulation simOut = getSimResult simOut >>= \frames -> animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black (buildAnimation simOut frames)
 
 main :: IO ()
 main = drawSimulation $ testSimElectron
