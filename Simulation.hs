@@ -59,13 +59,41 @@ getSimResult sim = do
 
 -- Test simulations
 testSimElectron :: Simulation
-testSimElectron = Simulation "singleElectron" "Single Electron" [Particle Electron (Vector3D 0 0 0) (Vector3D 0 0 0)] 0.1 10 10
+testSimElectron = Simulation {
+      name = "singleElectron"
+    , prettyName = "Single Electron"
+    , initialSetup = [Particle Electron (Vector3D 0 0 0) (Vector3D 0 0 0)]
+    , timeStep = 0.1
+    , duration = 10
+    , simScale = 10
+    }
 
 testSimTwoElectrons :: Simulation
-testSimTwoElectrons = Simulation "twoElectrons" "Two Electrons" [Particle Electron (Vector3D (-0.5) 0 0) (Vector3D 0 0 0), Particle Electron (Vector3D 0.5 0 0) (Vector3D 0 0 0)] 0.001 1 10
+testSimTwoElectrons = Simulation {
+      name = "twoElectrons"
+    , prettyName = "Two Electrons"
+    , initialSetup = [Particle Electron (Vector3D (-0.5) 0 0) (Vector3D 0 0 0), Particle Electron (Vector3D 0.5 0 0) (Vector3D 0 0 0)]
+    , timeStep = 0.001
+    , duration = 1
+    , simScale = 10
+    }
 
 testSimElectronPositron :: Simulation
-testSimElectronPositron = Simulation "electronPositron" "Electron and Positron" [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)] 0.00001 1 10
+testSimElectronPositron = Simulation {
+      name = "electronPositron"
+    , prettyName = "Electron and Positron"
+    , initialSetup = [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)]
+    , timeStep = 0.00001
+    , duration = 1
+    , simScale = 10
+    }
 
 testSimHydrogen :: Simulation
-testSimHydrogen = Simulation "hydrogen" "Single Hydrogen Atom" (spawnAtom Hydrogen (Vector3D 0 0 0) (Vector3D 0 0 0) []) 0.001 1 10
+testSimHydrogen = Simulation {
+      name = "hydrogen"
+    , prettyName = "Single Hydrogen Atom"
+    , initialSetup = spawnAtom Hydrogen (Vector3D 0 0 0) (Vector3D 0 0 0) []
+    , timeStep = 0.001
+    , duration = 1
+    , simScale = 10
+    }
