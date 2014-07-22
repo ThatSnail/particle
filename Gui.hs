@@ -18,13 +18,13 @@ timeScale :: Float
 timeScale = 0.1
 
 buildAnimation :: Simulation -> [[Particle]] -> Float -> Picture
-buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) frames t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
+buildAnimation (Simulation {simScale = ss, timeStep = ts}) frames t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
 
 drawParticles :: Double -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
 
 drawParticle :: Double -> Particle -> Picture
-drawParticle simScale p@(Particle pType (Vector3D x y z) _) = translate (realToFrac nx) (realToFrac ny) $ color col $ circleSolid $ max 1 (realToFrac nr)
+drawParticle simScale (Particle pType (Vector3D x y z) _) = translate (realToFrac nx) (realToFrac ny) $ color col $ circleSolid $ max 1 (realToFrac nr)
     where
         nx = (realToFrac x) * (fromIntegral (screenSize `div` 2)) / simScale
         ny = (realToFrac y) * (fromIntegral (screenSize `div` 2)) / simScale
