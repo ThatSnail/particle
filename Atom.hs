@@ -7,11 +7,12 @@ import System.Random
 import Particle
 import Physics
 import Math
+import NumberTypes
 
 data Atom = Hydrogen | Helium
 
 -- Spawns atom at position
-spawnAtom :: Atom -> Vector3D Double -> Vector3D Double -> [Particle] -> [Particle]
+spawnAtom :: Atom -> Vector3D PreciseNum -> Vector3D PreciseNum -> [Particle] -> [Particle]
 spawnAtom Hydrogen pos vel ps = proton : electron : ps
     where
         proton = Particle Proton pos vel
