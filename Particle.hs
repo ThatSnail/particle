@@ -1,6 +1,6 @@
 module Particle (
       Particle ( Particle, pType, pos, vel )
-    , ParticleType ( Proton, Neutron, Electron, Positron )
+    , ParticleType ( Proton, Neutron, Electron, Positron, MacroPositron )
     , mass
     , charge
     , radius
@@ -10,7 +10,7 @@ import Math
 import Physics
 import NumberTypes
 
-data ParticleType = Proton | Neutron | Electron | Positron deriving (Eq, Show, Read)
+data ParticleType = Proton | Neutron | Electron | Positron | MacroPositron deriving (Eq, Show, Read)
 
 data Particle = Particle {
       pType :: ParticleType
@@ -24,6 +24,7 @@ mass Proton = 1.67262 / (10 ** 27)
 mass Neutron = 1.67493 / (10 ** 27)
 mass Electron = 9.10939 / (10 ** 31)
 mass Positron = 9.10939 / (10 ** 31)
+mass MacroPositron = 10 ** 1000
 
 -- All charges in Couloumbs
 charge :: ParticleType -> Double
@@ -31,6 +32,7 @@ charge Proton = 1.6 / (10 ** 19)
 charge Neutron = 0
 charge Electron = (-1.6) / (10 ** 19)
 charge Positron = 1.6 / (10 ** 19)
+charge MacroPositron = 1.6 / (10 ** 19)
 
 -- All radii in meters
 -- NOTE: ALL OF THESE ARE VERY, VERY WRONG!
@@ -39,3 +41,4 @@ radius Proton = 5.29 / (10 ** 11)
 radius Neutron = 5.29 / (10 ** 11)
 radius Electron = 5.29 / (10 ** 11)
 radius Positron = 5.29 / (10 ** 11)
+radius MacroPositron = 5.29 / (10 ** 11)

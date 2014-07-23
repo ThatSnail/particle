@@ -20,7 +20,7 @@ particleSizeFactor = 100000000
 
 -- Set how much time passes in one second during the animation
 timeScale :: Float
-timeScale = 0.001
+timeScale = 0.01
 
 buildAnimation :: Simulation -> [[Particle]] -> Float -> Picture
 buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) frames t = pictures $ [drawParticles ss (frames !! (floor (t * timeScale / ts))), drawGUI sim (t * timeScale)]
@@ -57,9 +57,10 @@ drawParticle simScale (Particle pType (Vector3D x y z) _) = translate (realToFra
             | pType == Neutron = greyN 0.5
             | pType == Electron = yellow
             | pType == Positron = blue
+            | pType == MacroPositron = blue
 
 drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = getSimResult simOut >>= \frames -> animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black (buildAnimation simOut frames)
 
 main :: IO ()
-main = drawSimulation $ testSimElectronPositron
+main = drawSimulation $ testSimElectronMacroPositron

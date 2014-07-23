@@ -4,6 +4,7 @@ module Simulation (
     , testSimHydrogen
     , testSimElectron
     , testSimElectronPositron
+    , testSimElectronMacroPositron
     , testSimTwoElectrons
     ) where
 
@@ -83,7 +84,17 @@ testSimElectronPositron = Simulation {
       name = "electronPositron"
     , prettyName = "Electron and Positron"
     , initialSetup = [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)]
-    , timeStep = 0.0001
+    , timeStep = 0.001
+    , duration = 1
+    , simScale = 0.25
+    }
+
+testSimElectronMacroPositron :: Simulation
+testSimElectronMacroPositron = Simulation {
+      name = "electronMacroPositron"
+    , prettyName = "Electron and Macro Positron"
+    , initialSetup = [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle MacroPositron (Vector3D 0 0 0) (Vector3D 0 0 0)]
+    , timeStep = 0.001
     , duration = 1
     , simScale = 0.25
     }
