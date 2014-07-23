@@ -8,11 +8,11 @@ import Math
 import Physics
 import NumberTypes
 
-screenSize :: Int
+screenSize :: (Num a) => a
 screenSize = 500
 
-particleSizeFactor :: Double
-particleSizeFactor = 0.4
+particleSizeFactor :: Float
+particleSizeFactor = 1000000000
 
 -- Set how much time passes in one second during the animation
 timeScale :: Float
@@ -58,4 +58,4 @@ drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = getSimResult simOut >>= \frames -> animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black (buildAnimation simOut frames)
 
 main :: IO ()
-main = drawSimulation $ testSimElectron
+main = drawSimulation $ testSimElectronPositron
