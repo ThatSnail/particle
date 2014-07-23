@@ -6,6 +6,7 @@ module Forces (
     where
 
 import Data.List
+import Control.Applicative
 import Math
 import Particle
 import Physics
@@ -30,12 +31,24 @@ enactForceType :: ForceType -> TimeStep -> [Particle] -> [Particle]
 enactForceType EMForce dt ps = map applyAllForces ps
     where
         applyAllForces p = foldl (\p f -> applyForceSingle f dt p) p (forces p)
-        forces p = map (force p) $ delete p ps
-            where
-                force p1 p2 = Force EMForce (forceMag p1 p2) (forceDir p1 p2)
-                    where
-                        forceMag p1 p2 = realToFrac ((-coulombsConst) * (charge $ pType p1) * (charge $ pType p2)) / (dist (pos p1) (pos p2))
-                        forceDir p1 p2 = norm $ (pos p2) - (pos p1)
+        forces p = map (force EMForce p) $ delete p ps
+
+-- Force and potential calculations
+force :: ForceType -> Particle -> Particle -> Force
+force EMForce p1 p2 = Force EMForce (forceMag p1 p2) (forceDir p1 p2)
+    where
+        forceMag p1 p2 = realToFrac ((-coulombsConst) * (charge $ pType p1) * (charge $ pType p2)) / ((dist (pos p1) (pos p2)) ** 2)
+        forceDir p1 p2 = norm $ (pos p2) - (pos p1)
+
+-- Potential energy between two particles due to some force
+potential :: ForceType -> Particle -> Particle -> Energy
+potential EMForce p1 p2 = realToFrac ((-coulombsConst) * (charge $ pType p1) * (charge $ pType p2)) / (dist (pos p1) (pos p2))
+
+-- Potential energy of the entire system
+systemPotential :: [Particle] -> Energy
+systemPotential ps = sum $ map (\(p1, p2) -> potential EMForce p1 p2) $ pairs ps
+    where
+        pairs = concatMap (zip . repeat . head <*> tail) . (take . length <*> iterate tail)
 
 -- Apply a force onto one particle
 applyForceSingle :: Force -> TimeStep -> Particle -> Particle
