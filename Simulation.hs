@@ -1,5 +1,5 @@
 module Simulation (
-      Simulation ( Simulation, initialSetup, timeStep, simScale )
+      Simulation ( Simulation, prettyName, initialSetup, timeStep, duration, simScale )
     , getSimResult
     , testSimHydrogen
     , testSimElectron
@@ -22,7 +22,7 @@ data Simulation = Simulation {
     , initialSetup :: [Particle]
     , timeStep :: Float
     , duration :: Float
-    , simScale :: Double
+    , simScale :: Float
     } deriving Read
 
 runSimulation :: Simulation -> [[Particle]]
@@ -83,7 +83,7 @@ testSimElectronPositron = Simulation {
       name = "electronPositron"
     , prettyName = "Electron and Positron"
     , initialSetup = [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)]
-    , timeStep = 0.00001
+    , timeStep = 0.001
     , duration = 1
     , simScale = 10
     }
