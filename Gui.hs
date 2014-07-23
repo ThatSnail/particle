@@ -11,12 +11,16 @@ import NumberTypes
 screenSize :: (Num a) => a
 screenSize = 500
 
+screenTiles :: (Num a) => a
+screenTiles = 4
+
 particleSizeFactor :: Float
-particleSizeFactor = 1000000000
+--particleSizeFactor = 1000000000
+particleSizeFactor = 100000000
 
 -- Set how much time passes in one second during the animation
 timeScale :: Float
-timeScale = 0.1
+timeScale = 0.001
 
 buildAnimation :: Simulation -> [[Particle]] -> Float -> Picture
 buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) frames t = pictures $ [drawParticles ss (frames !! (floor (t * timeScale / ts))), drawGUI sim (t * timeScale)]
@@ -36,8 +40,8 @@ drawGUI sim@(Simulation {prettyName = n, duration = dur, simScale = ss}) time = 
                 lines = horizLines ++ vertLines
                     where
                         hlss = screenSize / 2
-                        horizLines = map (\x -> line [(x, (-hlss)), (x, hlss)]) [(-hlss),((-hlss) + ss).. hlss]
-                        vertLines = map (\y -> line [((-hlss), y), (hlss, y)]) [(-hlss), ((-hlss) + ss).. hlss]
+                        horizLines = map (\x -> line [(x, (-hlss)), (x, hlss)]) [(-hlss),((-hlss) + (hlss / screenTiles)).. hlss]
+                        vertLines = map (\y -> line [((-hlss), y), (hlss, y)]) [(-hlss), ((-hlss) + (hlss / screenTiles)).. hlss]
 
 drawParticles :: Float -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
@@ -45,8 +49,8 @@ drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
 drawParticle :: Float -> Particle -> Picture
 drawParticle simScale (Particle pType (Vector3D x y z) _) = translate (realToFrac nx) (realToFrac ny) $ color col $ circleSolid $ max 1 (realToFrac nr)
     where
-        nx = (realToFrac x) * (fromIntegral (screenSize `div` 2)) / simScale
-        ny = (realToFrac y) * (fromIntegral (screenSize `div` 2)) / simScale
+        nx = (realToFrac x) * (fromIntegral (screenSize `div` 2)) / (simScale * screenTiles)
+        ny = (realToFrac y) * (fromIntegral (screenSize `div` 2)) / (simScale * screenTiles)
         nr = fromIntegral screenSize * particleSizeFactor * (realToFrac (radius pType)) / simScale
         col
             | pType == Proton = red

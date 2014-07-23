@@ -17,12 +17,12 @@ import Atom
 import NumberTypes
 
 data Simulation = Simulation {
-      name :: String
-    , prettyName :: String
-    , initialSetup :: [Particle]
-    , timeStep :: Float
-    , duration :: Float
-    , simScale :: Float
+      name :: String -- Simulation name (used for .sim files)
+    , prettyName :: String -- Pretty name
+    , initialSetup :: [Particle] -- First Particle state (t = 0)
+    , timeStep :: Float -- dt to use for calculations (lower = more precision)
+    , duration :: Float -- length of time to run simulation for
+    , simScale :: Float -- width of one square (in meters)
     } deriving Read
 
 runSimulation :: Simulation -> [[Particle]]
@@ -83,9 +83,9 @@ testSimElectronPositron = Simulation {
       name = "electronPositron"
     , prettyName = "Electron and Positron"
     , initialSetup = [Particle Electron (Vector3D (-0.25) 0 0) (Vector3D 0 0 0), Particle Positron (Vector3D 0.25 0 0) (Vector3D 0 0 0)]
-    , timeStep = 0.001
+    , timeStep = 0.0001
     , duration = 1
-    , simScale = 10
+    , simScale = 0.25
     }
 
 testSimHydrogen :: Simulation
