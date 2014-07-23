@@ -1,4 +1,5 @@
 import Graphics.Gloss
+import Text.Printf
 
 import GHC.Float
 import Simulation
@@ -18,12 +19,30 @@ timeScale :: Float
 timeScale = 0.1
 
 buildAnimation :: Simulation -> [[Particle]] -> Float -> Picture
-buildAnimation (Simulation {simScale = ss, timeStep = ts}) frames t = drawParticles ss (frames !! (floor (t * timeScale / ts)))
+buildAnimation sim@(Simulation {simScale = ss, timeStep = ts}) frames t = pictures $ [drawParticles ss (frames !! (floor (t * timeScale / ts))), drawGUI sim (t * timeScale)]
 
-drawParticles :: Double -> [Particle] -> Picture
+drawGUI :: Simulation -> Float -> Picture
+drawGUI sim@(Simulation {prettyName = n, duration = dur, simScale = ss}) time = pictures $ concat [picsGrid, picsText]
+    where
+        picsText = map (translate picsTextX picsTextY . color green . scale 0.1 0.1) [picName, picTime, picDuration, picScale]
+        picsTextX = -(fromIntegral screenSize / 2) + 20
+        picsTextY = (fromIntegral screenSize / 2) - 20
+        picName = text n
+        picTime = translate 0 (-200) $ text ("Time: " ++ printf "%.3f\n" time ++ "s")
+        picDuration = translate 0 (-400) $ text ("Duration: " ++ show dur ++ "s")
+        picScale = translate 0 (-600) $ text ("Scale: " ++ show ss ++ "m")
+        picsGrid = map (color (greyN 0.1)) $ lines
+            where
+                lines = horizLines ++ vertLines
+                    where
+                        hlss = screenSize / 2
+                        horizLines = map (\x -> line [(x, (-hlss)), (x, hlss)]) [(-hlss),((-hlss) + ss).. hlss]
+                        vertLines = map (\y -> line [((-hlss), y), (hlss, y)]) [(-hlss), ((-hlss) + ss).. hlss]
+
+drawParticles :: Float -> [Particle] -> Picture
 drawParticles simScale ps = pictures $ map (drawParticle simScale) ps
 
-drawParticle :: Double -> Particle -> Picture
+drawParticle :: Float -> Particle -> Picture
 drawParticle simScale (Particle pType (Vector3D x y z) _) = translate (realToFrac nx) (realToFrac ny) $ color col $ circleSolid $ max 1 (realToFrac nr)
     where
         nx = (realToFrac x) * (fromIntegral (screenSize `div` 2)) / simScale
