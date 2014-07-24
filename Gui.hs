@@ -63,4 +63,4 @@ drawSimulation :: Simulation -> IO ()
 drawSimulation simOut = getSimResult simOut >>= \frames -> animate (InWindow "Particle Simulator" (screenSize, screenSize) (10, 10)) black (buildAnimation simOut frames)
 
 main :: IO ()
-main = drawSimulation $ testSimElectronMacroPositron
+main = drawSimulation $ testSimElectronPositron

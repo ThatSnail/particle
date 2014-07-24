@@ -1,3 +1,4 @@
+{-|
 module Simulation (
       Simulation ( Simulation, prettyName, initialSetup, timeStep, duration, simScale )
     , getSimResult
@@ -7,8 +8,10 @@ module Simulation (
     , testSimElectronMacroPositron
     , testSimTwoElectrons
     ) where
+|-}
 
 import System.Directory
+import Control.Applicative
 
 import Particle
 import Physics
@@ -26,17 +29,42 @@ data Simulation = Simulation {
     , simScale :: Float -- width of one square (in meters)
     } deriving Read
 
+-- Compute Hamiltonian constraint
+hamiltonian :: [Particle] -> Energy
+hamiltonian ps = systemKinetic ps + systemPotential ps
+
+-- Hamiltonian difference between two states of a system
+hamiltonianErr :: [Particle] -> [Particle] -> Energy
+hamiltonianErr ps1 ps2 = abs ((hamiltonian ps1) - (hamiltonian ps2))
+
+-- Kinetic energy of the entire system
+systemKinetic :: [Particle] -> Energy
+systemKinetic ps = sum $ map kinetic ps
+
+-- Potential energy of the entire system
+systemPotential :: [Particle] -> Energy
+systemPotential ps = sum $ map (\(p1, p2) -> potential EMForce p1 p2) $ pairs ps
+    where
+        pairs = concatMap (zip . repeat . head <*> tail) . (take . length <*> iterate tail)
+
 runSimulation :: Simulation -> [[Particle]]
 runSimulation (Simulation _ _ initialSetup timeStep duration _) = take (floor (duration / timeStep)) $ iterate (updateParticles timeStep) initialSetup
 
 updateParticles :: TimeStep -> [Particle] -> [Particle]
-updateParticles dt ps = map updateParticle $ enactAllForces dt ps
+updateParticles dt ps = ps'
     where
+        updatedps = zipWith resetVel (map updateParticle (enactAllForces dt ps)) ps
+        forcedps = enactAllForces dt updatedps
+        kineticChanges = zipWith (\ps1 ps2 -> (kinetic ps1) - (kinetic ps2)) forcedps ps
+        a = ((hamiltonian ps) - (systemPotential updatedps)) / (systemKinetic forcedps)
+        scaledKineticChanges = map (*a) kineticChanges
+        ps' = zipWith changeKinetic updatedps scaledKineticChanges
         updateParticle part@(Particle { pos = p, vel = v }) = part { pos = np }
             where
                 np = p + dv
                     where
                         dv = v * Vector3D (realToFrac dt) (realToFrac dt) (realToFrac dt)
+        resetVel p1 p2@(Particle { vel = v }) = p1 { vel = v }
 
 -- File operations (saving / loading simulations)
 saveSimResult :: Simulation -> IO ()

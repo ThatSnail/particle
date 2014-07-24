@@ -2,11 +2,13 @@ module Physics (
       coulombsConst
     , bohrsRadius
     , TimeStep
+    , Energy
     ) where
 
 import NumberTypes
 
 type TimeStep = Float
+type Energy = Double
 
 -- Coulomb's constant 1 / (4 * pi * e0)
 --  where e0 is the permittivity of free space

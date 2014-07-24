@@ -3,6 +3,7 @@ module Math (
     , dist
     , mag
     , norm
+    , changeMag
     ) where
 
 data Vector3D a = Vector3D a a a deriving (Show, Eq, Read)
@@ -32,3 +33,13 @@ norm :: (Floating a) => Vector3D a -> Vector3D a
 norm v = v / (Vector3D m m m)
     where
         m = mag v
+
+-- Change magnitude of vector (magnitude can go negative)
+changeMag :: (RealFloat a) => Vector3D a -> a -> Vector3D a
+changeMag v@(Vector3D x y z) dm = Vector3D (x + dx) (y + dy) (z + dz)
+    where
+        theta = atan2 y x
+        phi = atan2 z (sqrt (x ** 2 + y ** 2))
+        dx = dm * (cos theta) * (cos phi)
+        dy = dm * (sin theta) * (cos phi)
+        dz = dm * (sin phi)

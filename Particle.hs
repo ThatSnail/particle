@@ -4,6 +4,8 @@ module Particle (
     , mass
     , charge
     , radius
+    , kinetic
+    , changeKinetic
     ) where
 
 import Math
@@ -24,7 +26,7 @@ mass Proton = 1.67262 / (10 ** 27)
 mass Neutron = 1.67493 / (10 ** 27)
 mass Electron = 9.10939 / (10 ** 31)
 mass Positron = 9.10939 / (10 ** 31)
-mass MacroPositron = 10 ** 1000
+mass MacroPositron = 10 ** 100
 
 -- All charges in Couloumbs
 charge :: ParticleType -> Double
@@ -42,3 +44,13 @@ radius Neutron = 5.29 / (10 ** 11)
 radius Electron = 5.29 / (10 ** 11)
 radius Positron = 5.29 / (10 ** 11)
 radius MacroPositron = 5.29 / (10 ** 11)
+
+-- Kinetic energy of particle
+kinetic :: Particle -> Energy
+kinetic p = 0.5 * (mass $ pType p) * (mag $ vel p) ** 2
+
+-- Change the energy of the particle by some amount by changing velocity
+changeKinetic :: Particle -> Energy -> Particle
+changeKinetic p@(Particle {vel = v}) de = p { vel = nvel }
+    where
+        nvel = changeMag v $ (sqrt ((mag v) ** 2 + 2 * de / mass (pType p))) - (mag v)

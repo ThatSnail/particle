@@ -1,7 +1,9 @@
 {-| Elementary forces |-}
 
 module Forces (
-      enactAllForces
+      ForceType ( EMForce )
+    , enactAllForces
+    , potential
     )
     where
 
@@ -42,13 +44,7 @@ force EMForce p1 p2 = Force EMForce (forceMag p1 p2) (forceDir p1 p2)
 
 -- Potential energy between two particles due to some force
 potential :: ForceType -> Particle -> Particle -> Energy
-potential EMForce p1 p2 = realToFrac ((-coulombsConst) * (charge $ pType p1) * (charge $ pType p2)) / (dist (pos p1) (pos p2))
-
--- Potential energy of the entire system
-systemPotential :: [Particle] -> Energy
-systemPotential ps = sum $ map (\(p1, p2) -> potential EMForce p1 p2) $ pairs ps
-    where
-        pairs = concatMap (zip . repeat . head <*> tail) . (take . length <*> iterate tail)
+potential EMForce p1 p2 = realToFrac (coulombsConst * (charge $ pType p1) * (charge $ pType p2)) / (dist (pos p1) (pos p2))
 
 -- Apply a force onto one particle
 applyForceSingle :: Force -> TimeStep -> Particle -> Particle
